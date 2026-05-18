@@ -15,11 +15,11 @@ export function QuoteCard({
       <CardContent className={"flex flex-col"}>
         <div className="self-end">
           {isLiked ? (
-            <Button variant={"icon"} onClick={handleUnlikeQuote}>
+            <Button variant={"icon"} onClick={handleUnlikeQuote} aria-label="Unlike this quote">
               ❤️ Liked
             </Button>
           ) : (
-            <Button variant={"icon"} onClick={handleLikeQuote}>
+            <Button variant={"icon"} onClick={handleLikeQuote} aria-label="Like this quote">
               🤍 Like
             </Button>
           )}
@@ -27,7 +27,7 @@ export function QuoteCard({
         <H3 element="p">
           {quote}
         </H3>
-        <span className="text-md font-semibold text-slate-900 self-end mt-4">
+        <span className="text-md font-semibold text-muted-foreground self-end mt-4">
           - {author}
         </span>
 

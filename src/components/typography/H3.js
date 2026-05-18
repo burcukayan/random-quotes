@@ -2,15 +2,15 @@ export function H3({ element, children }) {
   switch (element) {
     case 'p':
       return (
-        <p className='text-2xl font-semibold text-slate-900'>{children}</p>
+        <p className='text-2xl font-semibold text-foreground'>{children}</p>
       );
     case 'span': 
       return (
-        <span className='text-2xl font-semibold text-slate-900'>{children}</span>
+        <span className='text-2xl font-semibold text-foreground'>{children}</span>
       );
     default:
       return (
-        <h3 className='text-2xl font-semibold text-slate-900'>{children}</h3>
+        <h3 className='text-2xl font-semibold text-foreground'>{children}</h3>
       );
   }
 }
