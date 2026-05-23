@@ -27,12 +27,15 @@ export function TopNav() {
       <NavigationMenuList>
         {appRoutes.map(({ name, url }) => (
           <NavigationMenuItem key={name}>
-            <NavigationMenuLink asChild className={navigationMenuTriggerStyle()}>
+            <NavigationMenuLink
+              asChild
+              className={navigationMenuTriggerStyle()}
+            >
               <Link href={url}>{name}</Link>
             </NavigationMenuLink>
           </NavigationMenuItem>
         ))}
       </NavigationMenuList>
     </NavigationMenu>
-  )
-};
+  );
+}

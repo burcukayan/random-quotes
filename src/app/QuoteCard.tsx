@@ -2,6 +2,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { H3 } from "@/components/typography/H3";
 
+interface QuoteCardProps {
+  handleLikeQuote: () => void;
+  handleUnlikeQuote: () => void;
+  isLiked?: number | boolean;
+  quote: string;
+  author: string;
+  handleQuoteIndexUpdate: () => void;
+}
+
 export function QuoteCard({
   handleLikeQuote,
   handleUnlikeQuote,
@@ -9,17 +18,17 @@ export function QuoteCard({
   quote,
   author,
   handleQuoteIndexUpdate,
-}) {
+}: QuoteCardProps) {
   return (
     <Card size="lg" className="mx-auto w-full max-w-sm">
       <CardContent className={"flex flex-col"}>
         <div className="self-end">
           {isLiked ? (
-            <Button variant={"icon"} onClick={handleUnlikeQuote}>
+            <Button variant={"ghost"} onClick={handleUnlikeQuote}>
               ❤️ Liked
             </Button>
           ) : (
-            <Button variant={"icon"} onClick={handleLikeQuote}>
+            <Button variant={"ghost"} onClick={handleLikeQuote}>
               🤍 Like
             </Button>
           )}

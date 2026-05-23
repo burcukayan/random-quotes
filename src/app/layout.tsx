@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import { QuotesContextProvider } from "@/app/QuotesContext";
-import {TopNav} from "@/app/Navbar";
+import { TopNav } from "@/app/Navbar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -24,15 +24,12 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-
-
-         <body className='min-h-full'>
+      <body className="min-h-full">
         <QuotesContextProvider>
           <TopNav />
           {children}
         </QuotesContextProvider>
       </body>
-
     </html>
   );
 }
