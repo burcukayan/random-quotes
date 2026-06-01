@@ -4,6 +4,7 @@ import { createContext, useState, type ReactNode } from "react";
 import { quotes as initialQuotes, type Quote } from "@/quotes";
 import { getRandomNumber } from "@/utils/helper-functions";
 
+
 interface QuotesContextInterface {
   quotes: Quote[];
   quoteIndex: number;
@@ -25,6 +26,7 @@ const InitialQuotesContext: QuotesContextInterface = {
 export const QuotesContext = createContext<QuotesContextInterface>(InitialQuotesContext);
 
 export function QuotesContextProvider({ children }) {
+
   const [quotes, setQuotes] = useState(() =>
     initialQuotes.map((q, index) => ({ ...q, id: index, isLiked: false })),
   );
@@ -42,6 +44,7 @@ export function QuotesContextProvider({ children }) {
   }
 
   function handleLikeQuote(id) {
+   
     setQuotes((prevQuotes) =>
       prevQuotes.map((quote) =>
         quote.id === id ? { ...quote, isLiked: true } : quote,

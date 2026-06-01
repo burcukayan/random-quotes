@@ -1,30 +1,31 @@
-import { Geist, Geist_Mono } from "next/font/google";
-import { QuotesContextProvider } from "@/app/QuotesContext";
-import { TopNav } from "@/app/Navbar";
-import "./globals.css";
+import { Playfair_Display, Inter } from 'next/font/google';
+import { QuotesContextProvider } from '@/app/QuotesContext';
+import { TopNav } from '@/app/Navbar';
+import './globals.css';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const inter = Inter({
+  variable: '--font-sans',
+  subsets: ['latin'],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const playfairDisplay = Playfair_Display({
+  variable: '--font-heading',
+  subsets: ['latin'],
+})
+
 
 export const metadata = {
-  title: "Random Quotes Application",
-  description: "Random Quotes Application 130625",
+  title: 'Random Quotes Application',
+  description: 'Random Quotes Application 200825',
 };
 
 export default function RootLayout({ children }) {
   return (
     <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang='en'
+      className={`${inter.variable} ${playfairDisplay.variable} h-full antialiased`}
     >
-      <body className="min-h-full">
+      <body className='min-h-full'>
         <QuotesContextProvider>
           <TopNav />
           {children}
