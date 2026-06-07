@@ -3,6 +3,7 @@
 import { use } from "react";
 import { QuotesContext } from "@/app/QuotesContext";
 import { QuoteCard } from "@/app/QuoteCard";
+import { useUser } from "@auth0/nextjs-auth0";
 
 export default function Home() {
   const {
@@ -11,6 +12,10 @@ export default function Home() {
     handleLikeQuote,
     handleUnlikeQuote,
   } = use(QuotesContext);
+
+  const { user, isLoading } = useUser();
+
+  if (!currentQuote) return null;
 
   const { id, quote, author, isLiked } = currentQuote;
 
@@ -23,6 +28,8 @@ export default function Home() {
         quote={quote}
         author={author}
         handleQuoteIndexUpdate={handleQuoteIndexUpdate}
+        isLoggedIn={!!user}
+        isLoadingUser={isLoading}
       />
     </main>
   );
