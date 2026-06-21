@@ -12,8 +12,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useActionState } from "react";
-import { addNewQuote, type AddNewQuoteState } from "./action";
+import { addNewQuote } from "./action";
 import { redirect } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  AddNewQuoteState,
+  NewQuoteInput,
+  newQuoteSchema,
+} from "@/types/quotes";
 
 const initialAddNewQuoteState: AddNewQuoteState = {
   success: false,
@@ -24,6 +31,14 @@ export default function AddNewQuotePage() {
     AddNewQuoteState,
     FormData
   >(addNewQuote, initialAddNewQuoteState);
+
+  const {
+    register,
+    formState: { errors: clientSideErrors },
+  } = useForm<NewQuoteInput>({
+    mode: "onBlur",
+    resolver: zodResolver(newQuoteSchema),
+  });
 
   if (isPending) return <p>Loading...</p>;
 
@@ -41,12 +56,11 @@ export default function AddNewQuotePage() {
                 <FieldLabel htmlFor="author">Author</FieldLabel>
                 <Input
                   type="text"
-                  name="author"
                   id="author"
                   placeholder="Evil Rabbit"
-                  required
                   aria-invalid={!!state.errors?.fieldErrors?.author}
                   defaultValue={state.data?.author}
+                  {...register("author")}
                   aria-describedby={
                     state.errors?.fieldErrors?.author
                       ? "author-error"
@@ -61,20 +75,32 @@ export default function AddNewQuotePage() {
                     </FieldError>
                   </div>
                 )}
+
+                {clientSideErrors.author && (
+                  <FieldError errors={clientSideErrors.author.message}>
+                    {clientSideErrors.author.message}
+                  </FieldError>
+                )}
               </Field>
 
               <Field>
                 <FieldLabel htmlFor="quote">Quote</FieldLabel>
                 <Textarea
                   id="quote"
-                  name="quote"
                   className="resize-none"
                   aria-invalid={!!state.errors?.fieldErrors?.quote}
                   defaultValue={state.data?.quote}
+                  {...register("quote")}
                 />
                 {state.errors?.fieldErrors?.quote && (
                   <FieldError errors={state.errors?.fieldErrors?.quote}>
                     {state.errors?.fieldErrors?.quote}
+                  </FieldError>
+                )}
+
+                {clientSideErrors.quote && (
+                  <FieldError errors={clientSideErrors.quote.message}>
+                    {clientSideErrors.quote.message}
                   </FieldError>
                 )}
               </Field>
