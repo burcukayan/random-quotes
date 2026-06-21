@@ -40,11 +40,17 @@ const buttonVariants = cva(
 )
 
 function Button({
-  className,
-  variant = "default",
-  size = "default",
+  className = '',
+  variant = "default" as const,
+  size = "default" as const,
   asChild = false,
   ...props
+}: {
+  className?: string;
+  variant?: "default" | "outline" | "secondary" | "ghost" | "destructive" | "link";
+  size?: "default" | "xs" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
+  asChild?: boolean;
+  [key: string]: any;
 }) {
   const Comp = asChild ? Slot.Root : "button"
 

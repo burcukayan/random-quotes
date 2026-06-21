@@ -5,7 +5,23 @@ import { NavigationMenu as NavigationMenuPrimitive } from "radix-ui";
 import { cn } from "@/lib/utils";
 import { CaretDownIcon } from "@phosphor-icons/react";
 
-function NavigationMenu({ className, children, viewport = true, ...props }) {
+interface NavigationMenuProps {
+  className?: string;
+  children: React.ReactNode;
+  viewport?: boolean;
+}
+
+interface NavigationMenuListProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+interface NavigationMenuItemProps {
+  className?: string;
+  children: React.ReactNode;
+}
+
+function NavigationMenu({ className, children, viewport = true, ...props }: NavigationMenuProps) {
   return (
     <NavigationMenuPrimitive.Root
       data-slot="navigation-menu"
@@ -22,7 +38,7 @@ function NavigationMenu({ className, children, viewport = true, ...props }) {
   );
 }
 
-function NavigationMenuList({ className, ...props }) {
+function NavigationMenuList({ className, ...props }: NavigationMenuListProps) {
   return (
     <NavigationMenuPrimitive.List
       data-slot="navigation-menu-list"
@@ -35,7 +51,7 @@ function NavigationMenuList({ className, ...props }) {
   );
 }
 
-function NavigationMenuItem({ className, ...props }) {
+function NavigationMenuItem({ className, ...props }: NavigationMenuItemProps) {
   return (
     <NavigationMenuPrimitive.Item
       data-slot="navigation-menu-item"
@@ -78,7 +94,7 @@ function NavigationMenuContent({ className, ...props }) {
   );
 }
 
-function NavigationMenuViewport({ className, ...props }) {
+function NavigationMenuViewport({ className ='', ...props }) {
   return (
     <div
       className={cn(

@@ -1,4 +1,14 @@
-export const quotes = [
+export interface Quote {
+  quote: string;
+  author: string;
+  }
+
+  export interface QuoteState extends Quote {  
+  id: number;  
+  isLiked: boolean;  
+}  
+
+export const quotes: Quote[] = [
   {
     quote: "Be yourself; everyone else is already taken.",
     author: "Oscar Wilde",

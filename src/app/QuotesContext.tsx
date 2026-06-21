@@ -1,12 +1,32 @@
 "use client";
 
-import { createContext, useState } from "react";
-import { quotes as initialQuotes } from "@/quotes";
+import { createContext, useState, type ReactNode } from "react";
+import { quotes as initialQuotes, type Quote } from "@/quotes";
 import { getRandomNumber } from "@/utils/helper-functions";
 
-export const QuotesContext = createContext({});
+
+interface QuotesContextInterface {
+  quotes: Quote[];
+  quoteIndex: number;
+  currentQuote: Quote | null;
+  handleQuoteIndexUpdate: () => void;
+  handleLikeQuote: (id: number) => void;
+  handleUnlikeQuote: (id: number) => void;
+}
+
+const InitialQuotesContext: QuotesContextInterface = {
+  quotes: [],
+  quoteIndex: 0,
+  currentQuote: null,
+  handleQuoteIndexUpdate: () => console.log(''),
+  handleLikeQuote: () => console.log(''),
+  handleUnlikeQuote: () => console.log(''),
+};
+
+export const QuotesContext = createContext<QuotesContextInterface>(InitialQuotesContext);
 
 export function QuotesContextProvider({ children }) {
+
   const [quotes, setQuotes] = useState(() =>
     initialQuotes.map((q, index) => ({ ...q, id: index, isLiked: false })),
   );
@@ -24,6 +44,7 @@ export function QuotesContextProvider({ children }) {
   }
 
   function handleLikeQuote(id) {
+   
     setQuotes((prevQuotes) =>
       prevQuotes.map((quote) =>
         quote.id === id ? { ...quote, isLiked: true } : quote,
