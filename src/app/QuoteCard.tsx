@@ -36,7 +36,7 @@ export function QuoteCard({
         <H3 element="p">
           {quote}
         </H3>
-        <span className="text-md font-semibold text-slate-900 self-end mt-4">
+        <span className="text-md font-semibold text-muted-foreground self-end mt-4">
           - {author}
         </span>
 

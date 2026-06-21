@@ -15,7 +15,7 @@ export default function Home() {
   const { id, quote, author, isLiked } = currentQuote;
 
   return (
-    <main className="min-h-screen flex items-center justify-center">
+    <main className="min-h-screen flex items-center justify-center px-4 sm:px-6">
       <QuoteCard
         handleLikeQuote={() => handleLikeQuote(id)}
         handleUnlikeQuote={() => handleUnlikeQuote(id)}
