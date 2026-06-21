@@ -1,8 +1,7 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
-
 
 import {
   NavigationMenu,
@@ -10,24 +9,24 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu';
+} from "@/components/ui/navigation-menu";
 
 const appRoutes = [
   {
-    name: 'Home',
-    url: '/',
+    name: "Home",
+    url: "/",
     protectedPage: false,
   },
   {
-    name: 'My Liked Quotes',
-    url: '/user/quotes/liked',
+    name: "My Liked Quotes",
+    url: "/user/quotes/liked",
     protectedPage: true,
   },
 ];
 
 export function TopNav() {
   const { user, isLoading } = useUser();
-console.log('user', user);
+
   if (isLoading) return <></>;
 
   return (
