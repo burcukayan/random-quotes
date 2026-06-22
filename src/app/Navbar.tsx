@@ -10,6 +10,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { ModeToggle } from "@/components/ModeToggle";
 
 const appRoutes = [
   {
@@ -76,6 +77,10 @@ export function TopNav() {
             </NavigationMenuLink>
           </NavigationMenuItem>
         )}
+
+        <NavigationMenuItem className="ml-2 flex items-center">
+          <ModeToggle />
+        </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
