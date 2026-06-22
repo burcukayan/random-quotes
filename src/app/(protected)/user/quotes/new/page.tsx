@@ -11,7 +11,15 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useActionState } from "react";
+import { useActionState, startTransition } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { QUOTE_CATEGORIES } from "@/types/quotes";
 import { addNewQuote } from "./action";
 import { redirect } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -34,11 +42,22 @@ export default function AddNewQuotePage() {
 
   const {
     register,
+    trigger,
+    setValue,
     formState: { errors: clientSideErrors },
   } = useForm<NewQuoteInput>({
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
   });
+
+  const handleClientValidation = async (formData: FormData) => {
+    const isFormValid = await trigger();
+    if (isFormValid) {
+      startTransition(() => {
+        dispatchAction(formData);
+      });
+    }
+  };
 
   if (isPending) return <p>Loading...</p>;
 
@@ -46,7 +65,7 @@ export default function AddNewQuotePage() {
 
   return (
     <main className="min-h-screen flex-col justify-items-center pt-20">
-      <form className="w-full max-w-md" action={dispatchAction}>
+      <form className="w-full max-w-md" action={handleClientValidation}>
         <FieldGroup>
           <FieldSet>
             <FieldLegend>Add A New Quote</FieldLegend>
@@ -58,29 +77,26 @@ export default function AddNewQuotePage() {
                   type="text"
                   id="author"
                   placeholder="Evil Rabbit"
-                  aria-invalid={!!state.errors?.fieldErrors?.author}
+                  aria-invalid={
+                    !!state.errors?.fieldErrors?.author ||
+                    !!clientSideErrors.author
+                  }
                   defaultValue={state.data?.author}
                   {...register("author")}
-                  aria-describedby={
-                    state.errors?.fieldErrors?.author
-                      ? "author-error"
-                      : undefined
-                  }
+                  aria-describedby={"author-error"}
                 />
 
-                {state.errors?.fieldErrors?.author && (
-                  <div id="author-error" aria-live="polite">
+                <div id="author-error" aria-live="polite">
+                  {clientSideErrors.author ? (
+                    <FieldError errors={clientSideErrors.author.message}>
+                      {clientSideErrors.author.message}
+                    </FieldError>
+                  ) : state.errors?.fieldErrors?.author ? (
                     <FieldError errors={state.errors?.fieldErrors?.author}>
                       {state.errors?.fieldErrors?.author}
                     </FieldError>
-                  </div>
-                )}
-
-                {clientSideErrors.author && (
-                  <FieldError errors={clientSideErrors.author.message}>
-                    {clientSideErrors.author.message}
-                  </FieldError>
-                )}
+                  ) : null}
+                </div>
               </Field>
 
               <Field>
@@ -91,24 +107,68 @@ export default function AddNewQuotePage() {
                   aria-invalid={!!state.errors?.fieldErrors?.quote}
                   defaultValue={state.data?.quote}
                   {...register("quote")}
+                  aria-describedby="quote-error"
                 />
-                {state.errors?.fieldErrors?.quote && (
-                  <FieldError errors={state.errors?.fieldErrors?.quote}>
-                    {state.errors?.fieldErrors?.quote}
-                  </FieldError>
-                )}
+                <div id="quote-error" aria-live="polite">
+                  {clientSideErrors.quote ? (
+                    <FieldError errors={clientSideErrors.quote.message}>
+                      {clientSideErrors.quote.message}
+                    </FieldError>
+                  ) : state.errors?.fieldErrors?.quote ? (
+                    <FieldError errors={state.errors?.fieldErrors?.quote}>
+                      {state.errors?.fieldErrors?.quote}
+                    </FieldError>
+                  ) : null}
+                </div>
+              </Field>
 
-                {clientSideErrors.quote && (
-                  <FieldError errors={clientSideErrors.quote.message}>
-                    {clientSideErrors.quote.message}
-                  </FieldError>
-                )}
+              <Field>
+                <FieldLabel htmlFor="category">Category</FieldLabel>
+                <Select
+                  name="category"
+                  defaultValue={state.data?.category}
+                  onValueChange={(value) => {
+                    setValue("category", value as NewQuoteInput["category"], { shouldValidate: true });
+                  }}
+                >
+                  <SelectTrigger
+                    id="category"
+                    aria-invalid={
+                      !!state.errors?.fieldErrors?.category ||
+                      !!clientSideErrors.category
+                    }
+                    aria-describedby="category-error"
+                  >
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {QUOTE_CATEGORIES.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <div id="category-error" aria-live="polite">
+                  {clientSideErrors.category ? (
+                    <FieldError errors={clientSideErrors.category.message}>
+                      {clientSideErrors.category.message}
+                    </FieldError>
+                  ) : state.errors?.fieldErrors?.category ? (
+                    <FieldError errors={state.errors?.fieldErrors?.category}>
+                      {state.errors?.fieldErrors?.category}
+                    </FieldError>
+                  ) : null}
+                </div>
               </Field>
             </FieldGroup>
           </FieldSet>
           <Field orientation="horizontal">
-            <Button type="submit">Create</Button>
-            <Button variant="outline" type="reset">
+            <Button type="submit" disabled={isPending}>
+              Create
+            </Button>
+            <Button variant="outline" type="reset" disabled={isPending}>
               Clear
             </Button>
           </Field>
