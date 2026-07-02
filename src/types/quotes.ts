@@ -23,7 +23,11 @@ export const newQuoteSchema = z.object({
     category: z.enum(QUOTE_CATEGORIES),
 });
 
-export type NewQuoteInput = z.infer<typeof newQuoteSchema>;
+export interface NewQuoteInput {
+  author: string;
+  quote: string;
+  category: string;
+}
 
 export type AddNewQuoteState = {
   success: boolean;
@@ -45,9 +49,14 @@ export type AddNewQuoteState = {
 };
 
 export interface Quote {
+  _id: unknown;
   quote: string;
   author: string;
   category: string;
   isLiked?: boolean;
   id?: number;
+  createdBy: string;
+  adminApproved: boolean;
+  createdAt: string;
+  updatedAt: string;
 }

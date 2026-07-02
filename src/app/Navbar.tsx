@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { Button } from "@/components/ui/button";
 
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 
 const appRoutes = [
@@ -31,28 +31,29 @@ export function TopNav() {
   if (isLoading) return <></>;
 
   return (
+    <div className="w-full flex justify-start pl-12 md:pl-24 py-4">
     <NavigationMenu>
-      <NavigationMenuList>
+      <NavigationMenuList className="flex gap-2 flex-wrap">
         {appRoutes.map(({ name, url, protectedPage }) => {
           if (protectedPage) {
             return !!user ? (
               <NavigationMenuItem key={name}>
-                <NavigationMenuLink
-                  asChild
-                  className={navigationMenuTriggerStyle()}
-                >
-                  <Link href={url}>{name}</Link>
+                <NavigationMenuLink asChild className="">
+                  <Button variant="nav-hover" asChild>
+                    <Link href={url}>{name}</Link>
+                  </Button>
                 </NavigationMenuLink>
               </NavigationMenuItem>
+              
             ) : null;
+            
           }
           return (
             <NavigationMenuItem key={name}>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <Link href={url}>{name}</Link>
+              <NavigationMenuLink asChild className="">
+                <Button variant="nav-hover" asChild>
+                  <Link href={url}>{name}</Link>
+                </Button>
               </NavigationMenuLink>
             </NavigationMenuItem>
           );
@@ -61,45 +62,43 @@ export function TopNav() {
         {!!user ? (
           <>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <Link href={'/user/quotes/new'}>Add Quote</Link>
+              <NavigationMenuLink asChild className="">
+                <Button variant="nav-hover" asChild>
+                  <Link href={"/user/quotes/new"}>Add Quote</Link>
+                </Button>
               </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <a href="/auth/logout">Log out</a>
+              <NavigationMenuLink asChild className="">
+                <Button variant="nav-hover" asChild>
+                  <a href="/auth/logout">Log out</a>
+                </Button>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </>
         ) : (
           <>
             <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <a href="/auth/login">Log in</a>
+              <NavigationMenuLink asChild className="">
+                <Button variant="nav-hover" asChild>
+                  <a href="/auth/login">Log in</a>
+                </Button>
               </NavigationMenuLink>
             </NavigationMenuItem>
 
             <NavigationMenuItem>
-              <NavigationMenuLink
-                asChild
-                className={navigationMenuTriggerStyle()}
-              >
-                <a href="/auth/login?screen_hint=signup">Register</a>
+              <NavigationMenuLink asChild className="">
+                <Button variant="nav-hover" asChild>
+                  <a href="/auth/login?screen_hint=signup">Register</a>
+                </Button>
               </NavigationMenuLink>
             </NavigationMenuItem>
           </>
         )}
       </NavigationMenuList>
     </NavigationMenu>
+    </div>
   );
+  
 }

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { H3 } from "@/components/typography/H3";
+import  Link  from "next/link";
 
 interface QuoteCardProps {
   handleLikeQuote: () => void;
@@ -11,6 +12,8 @@ interface QuoteCardProps {
   handleQuoteIndexUpdate: () => void;
   isLoggedIn?: boolean;
   isLoadingUser?: boolean;
+  isCreator?: boolean;
+  quoteId?: string;
 }
 
 export function QuoteCard({
@@ -22,10 +25,21 @@ export function QuoteCard({
   handleQuoteIndexUpdate,
   isLoggedIn,
   isLoadingUser,
+  isCreator,
+  quoteId,
 }: QuoteCardProps) {
   return (
     <Card size="lg" className="mx-auto w-full max-w-sm">
       <CardContent className={"flex flex-col"}>
+        <div className="flex justify-between items-center w-full mb-4">
+          <div>
+            {isCreator && quoteId && (
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/quotes/edit/${quoteId}`}>✏️ Edit</Link>
+              </Button>
+            )}
+          </div>
+          </div>
         <div className="self-end">
           {isLiked ? (
             <Button

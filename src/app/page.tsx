@@ -13,11 +13,14 @@ export default function Home() {
     handleUnlikeQuote,
   } = use(QuotesContext);
 
+  
   const { user, isLoading } = useUser();
 
   if (!currentQuote) return null;
 
-  const { id, quote, author, isLiked } = currentQuote;
+  const { id, _id,  quote, author, isLiked, createdBy } = currentQuote;
+
+  const isCreator = Boolean(user?.sub && createdBy && user.sub === createdBy);
 
   return (
     <main className="min-h-screen flex items-center justify-center">
@@ -30,6 +33,8 @@ export default function Home() {
         handleQuoteIndexUpdate={handleQuoteIndexUpdate}
         isLoggedIn={!!user}
         isLoadingUser={isLoading}
+        isCreator={isCreator}
+        quoteId={_id as string}
       />
     </main>
   );

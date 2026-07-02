@@ -2,6 +2,7 @@
 
 import { auth0 } from "@/lib/auth0";
 import { AddNewQuoteState, newQuoteSchema } from "@/types/quotes";
+import { Collections, getDb } from '@/lib/db';
 import z from "zod";
 
 export async function addNewQuote(
@@ -9,8 +10,9 @@ export async function addNewQuote(
   formData: FormData,
 ): Promise<AddNewQuoteState> {
   const session = await auth0.getSession();
+  const user = session?.user;
 
-  if (!session) {
+  if (!session || !user ) {
     return {
       success: false,
       message: "Please log in to add a quote.",
@@ -35,6 +37,22 @@ export async function addNewQuote(
       data: rawData,
     };
   } else {
+
+    const db = await getDb();
+    const col = db.collection(Collections.quotes);
+    const now = new Date();
+   
+    const newQuote = {
+      quote: validationOutput.data.quote,
+      author: validationOutput.data.author,
+      createdBy: user.sub,
+      adminApproved: false,
+      createdAt: now,
+      updatedAt: now
+    }
+
+    await col.insertOne(newQuote);
+
     return {
       success: true,
     };
