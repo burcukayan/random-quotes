@@ -1,9 +1,12 @@
 export interface Quote {
   quote: string;
   author: string;
-  isLiked?: boolean;
-  id?: number;
-}
+  }
+
+  export interface QuoteState extends Quote {  
+  id: number;  
+  isLiked: boolean;  
+}  
 
 export const quotes: Quote[] = [
   {
