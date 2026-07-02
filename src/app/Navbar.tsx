@@ -68,14 +68,25 @@ export function TopNav() {
             </NavigationMenuLink>
           </NavigationMenuItem>
         ) : (
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <a href="/auth/login">Log in</a>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+          <>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <a href="/auth/login">Log in</a>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <a href="/auth/login?screen_hint=signup">Register</a>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </>
         )}
 
         <NavigationMenuItem className="ml-2 flex items-center">
