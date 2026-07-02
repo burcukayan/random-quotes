@@ -1,12 +1,4 @@
-export interface Quote {
-  quote: string;
-  author: string;
-  }
-
-  export interface QuoteState extends Quote {  
-  id: number;  
-  isLiked: boolean;  
-}  
+import { Quote } from "./types/quotes";
 
 export const quotes: Quote[] = [
   {

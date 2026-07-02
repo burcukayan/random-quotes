@@ -59,14 +59,25 @@ export function TopNav() {
         })}
 
         {!!user ? (
-          <NavigationMenuItem>
-            <NavigationMenuLink
-              asChild
-              className={navigationMenuTriggerStyle()}
-            >
-              <a href="/auth/logout">Log out</a>
-            </NavigationMenuLink>
-          </NavigationMenuItem>
+          <>
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <Link href={'/user/quotes/new'}>Add Quote</Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink
+                asChild
+                className={navigationMenuTriggerStyle()}
+              >
+                <a href="/auth/logout">Log out</a>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </>
         ) : (
           <>
             <NavigationMenuItem>
