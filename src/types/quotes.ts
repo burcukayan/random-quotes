@@ -1,5 +1,7 @@
 import z from "zod";
 
+export const QUOTE_CATEGORIES = ["Motivation", "Wisdom", "Humor", "Life", "Other"] as const;
+
 export const newQuoteSchema = z.object({
   author: z
     .string()
@@ -17,12 +19,11 @@ export const newQuoteSchema = z.object({
       message:
         "Quote should be 300 characters long maximum. Please try a shorter one.",
     }),
+
+    category: z.enum(QUOTE_CATEGORIES),
 });
 
-export interface NewQuoteInput {
-  author: string;
-  quote: string;
-}
+export type NewQuoteInput = z.infer<typeof newQuoteSchema>;
 
 export type AddNewQuoteState = {
   success: boolean;
@@ -31,6 +32,7 @@ export type AddNewQuoteState = {
     fieldErrors: {
       author?: string[];
       quote?: string[];
+      category?: string[];
       [key: string]: string[] | undefined;
     };
   };
@@ -38,12 +40,14 @@ export type AddNewQuoteState = {
   data?: {
     author: string;
     quote: string;
+    category: string;
   };
 };
 
 export interface Quote {
   quote: string;
   author: string;
+  category: string;
   isLiked?: boolean;
   id?: number;
 }
