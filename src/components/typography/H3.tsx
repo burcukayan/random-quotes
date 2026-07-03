@@ -9,11 +9,11 @@ export function H3({ element, children }: H3Interface) {
   switch (element) {
     case 'p':
       return (
-        <p className='text-2xl font-semibold text-slate-900'>{children}</p>
+        <p className='text-2xl font-semibold text-foreground'>{children}</p>
       );
     case 'span': 
       return (
-        <span className='text-2xl font-semibold text-slate-900'>{children}</span>
+        <span className='text-2xl font-semibold text-foreground'>{children}</span>
       );
       case 'h1': 
       return (
@@ -21,7 +21,7 @@ export function H3({ element, children }: H3Interface) {
       );
     default:
       return (
-        <h3 className='text-2xl font-semibold text-slate-900'>{children}</h3>
+        <h3 className='text-2xl font-semibold text-foreground'>{children}</h3>
       );
   }
 }

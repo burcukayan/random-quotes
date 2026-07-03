@@ -45,6 +45,7 @@ export default function AddNewQuotePage() {
     trigger,
     setValue,
     formState: { errors: clientSideErrors },
+    clearErrors,
   } = useForm<NewQuoteInput>({
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
@@ -95,8 +96,15 @@ export default function AddNewQuotePage() {
                     <FieldError errors={state.errors?.fieldErrors?.author}>
                       {state.errors?.fieldErrors?.author}
                     </FieldError>
-                  ) : null}
-                </div>
+                  </div>
+                )}
+
+                {!state.errors?.fieldErrors?.author &&
+                  clientSideErrors.author && (
+                    <FieldError errors={clientSideErrors.author.message}>
+                      {clientSideErrors.author.message}
+                    </FieldError>
+                  )}
               </Field>
 
               <Field>
@@ -150,25 +158,23 @@ export default function AddNewQuotePage() {
                   </SelectContent>
                 </Select>
 
-                <div id="category-error" aria-live="polite">
-                  {clientSideErrors.category ? (
-                    <FieldError errors={clientSideErrors.category.message}>
-                      {clientSideErrors.category.message}
+                {!state.errors?.fieldErrors?.quote &&
+                  clientSideErrors.quote && (
+                    <FieldError errors={clientSideErrors.quote.message}>
+                      {clientSideErrors.quote.message}
                     </FieldError>
-                  ) : state.errors?.fieldErrors?.category ? (
-                    <FieldError errors={state.errors?.fieldErrors?.category}>
-                      {state.errors?.fieldErrors?.category}
-                    </FieldError>
-                  ) : null}
-                </div>
+                  )}
               </Field>
             </FieldGroup>
           </FieldSet>
           <Field orientation="horizontal">
-            <Button type="submit" disabled={isPending}>
-              Create
-            </Button>
-            <Button variant="outline" type="reset" disabled={isPending}>
+            <Button type="submit">Create</Button>
+
+            <Button
+              variant="outline"
+              type="reset"
+              onClick={() => clearErrors()}
+            >
               Clear
             </Button>
           </Field>

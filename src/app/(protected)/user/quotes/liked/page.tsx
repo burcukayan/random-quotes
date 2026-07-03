@@ -11,7 +11,7 @@ export default function LikedQuotesPage() {
   const likedQuotes = quotes.filter((q) => q.isLiked);
 
   return (
-    <main className="min-h-screen flex flex-col items-center py-16 bg-slate-200 px-4">
+    <main className="min-h-screen flex flex-col items-center py-16 bg-background px-4 sm:px-6">
       <H3 element="h1">Liked Quotes</H3>
 
       <div className="mt-10 flex flex-col gap-6 w-[700px] max-w-full">
@@ -23,7 +23,7 @@ export default function LikedQuotesPage() {
           likedQuotes.map((item) => (
             <article
               key={item.id}
-              className="bg-slate-50 rounded-md p-6 flex flex-col shadow-sm relative"
+              className="bg-card text-card-foreground border border-border rounded-xl p-6 flex flex-col shadow-sm relative"
             >
               <div className="absolute top-4 right-4">
                 <Button
@@ -33,10 +33,10 @@ export default function LikedQuotesPage() {
                   ❌ Unlike
                 </Button>
               </div>
-              <p className="text-xl font-medium text-slate-800 pr-24">
+              <p className="text-xl font-medium text-foreground pr-24">
                 "{item.quote}"
               </p>
-              <span className="text-md font-semibold text-slate-600 self-end mt-2">
+              <span className="text-md font-semibold text-muted-foreground self-end mt-2">
                 - {item.author}
               </span>
             </article>
