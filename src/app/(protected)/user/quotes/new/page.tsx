@@ -35,6 +35,7 @@ export default function AddNewQuotePage() {
   const {
     register,
     formState: { errors: clientSideErrors },
+    clearErrors,
   } = useForm<NewQuoteInput>({
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
@@ -76,11 +77,12 @@ export default function AddNewQuotePage() {
                   </div>
                 )}
 
-                {clientSideErrors.author && (
-                  <FieldError errors={clientSideErrors.author.message}>
-                    {clientSideErrors.author.message}
-                  </FieldError>
-                )}
+                {!state.errors?.fieldErrors?.author &&
+                  clientSideErrors.author && (
+                    <FieldError errors={clientSideErrors.author.message}>
+                      {clientSideErrors.author.message}
+                    </FieldError>
+                  )}
               </Field>
 
               <Field>
@@ -98,17 +100,23 @@ export default function AddNewQuotePage() {
                   </FieldError>
                 )}
 
-                {clientSideErrors.quote && (
-                  <FieldError errors={clientSideErrors.quote.message}>
-                    {clientSideErrors.quote.message}
-                  </FieldError>
-                )}
+                {!state.errors?.fieldErrors?.quote &&
+                  clientSideErrors.quote && (
+                    <FieldError errors={clientSideErrors.quote.message}>
+                      {clientSideErrors.quote.message}
+                    </FieldError>
+                  )}
               </Field>
             </FieldGroup>
           </FieldSet>
           <Field orientation="horizontal">
             <Button type="submit">Create</Button>
-            <Button variant="outline" type="reset">
+
+            <Button
+              variant="outline"
+              type="reset"
+              onClick={() => clearErrors()}
+            >
               Clear
             </Button>
           </Field>
