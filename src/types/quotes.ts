@@ -20,7 +20,9 @@ export const newQuoteSchema = z.object({
         "Quote should be 300 characters long maximum. Please try a shorter one.",
     }),
 
-    category: z.enum(QUOTE_CATEGORIES),
+    category: z.enum(QUOTE_CATEGORIES, {
+      message: "Please select a category.",
+    }),
 });
 
 export type NewQuoteInput = z.infer<typeof newQuoteSchema>;

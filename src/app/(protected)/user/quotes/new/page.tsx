@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useActionState, startTransition } from "react";
+import { useActionState, startTransition, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -50,6 +50,10 @@ export default function AddNewQuotePage() {
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
   });
+
+  useEffect(() => {
+    register("category");
+  }, [register]);
 
   const handleClientValidation = async (formData: FormData) => {
     const isFormValid = await trigger();
@@ -96,15 +100,8 @@ export default function AddNewQuotePage() {
                     <FieldError errors={state.errors?.fieldErrors?.author}>
                       {state.errors?.fieldErrors?.author}
                     </FieldError>
-                  </div>
-                )}
-
-                {!state.errors?.fieldErrors?.author &&
-                  clientSideErrors.author && (
-                    <FieldError errors={clientSideErrors.author.message}>
-                      {clientSideErrors.author.message}
-                    </FieldError>
-                  )}
+                  ) : null}
+                </div>
               </Field>
 
               <Field>
@@ -136,7 +133,9 @@ export default function AddNewQuotePage() {
                   name="category"
                   defaultValue={state.data?.category}
                   onValueChange={(value) => {
-                    setValue("category", value as NewQuoteInput["category"], { shouldValidate: true });
+                    setValue("category", value as NewQuoteInput["category"], {
+                      shouldValidate: true,
+                    });
                   }}
                 >
                   <SelectTrigger
@@ -158,12 +157,17 @@ export default function AddNewQuotePage() {
                   </SelectContent>
                 </Select>
 
-                {!state.errors?.fieldErrors?.quote &&
-                  clientSideErrors.quote && (
-                    <FieldError errors={clientSideErrors.quote.message}>
-                      {clientSideErrors.quote.message}
+                <div id="category-error" aria-live="polite">
+                  {clientSideErrors.category ? (
+                    <FieldError errors={clientSideErrors.category.message}>
+                      {clientSideErrors.category.message}
                     </FieldError>
-                  )}
+                  ) : state.errors?.fieldErrors?.category ? (
+                    <FieldError errors={state.errors?.fieldErrors?.category}>
+                      {state.errors?.fieldErrors?.category}
+                    </FieldError>
+                  ) : null}
+                </div>
               </Field>
             </FieldGroup>
           </FieldSet>
