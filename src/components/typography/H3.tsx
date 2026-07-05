@@ -17,7 +17,7 @@ export function H3({ element, children }: H3Interface) {
       );
       case 'h1': 
       return (
-        <h1 className='text-2xl font-semibold text-slate-900'>{children}</h1>
+        <h1 className='text-2xl font-semibold text-slate-900 dark:text-white'>{children}</h1>
       );
     default:
       return (

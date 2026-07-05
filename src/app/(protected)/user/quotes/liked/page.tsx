@@ -16,7 +16,7 @@ export default function LikedQuotesPage() {
 
       <div className="mt-10 flex flex-col gap-6 w-[700px] max-w-full">
         {likedQuotes.length === 0 ? (
-          <p className="text-center text-slate-500 text-lg">
+          <p className="text-center text-slate-500 dark:text-slate-300 text-lg">
             You haven't liked any quotes yet.
           </p>
         ) : (
