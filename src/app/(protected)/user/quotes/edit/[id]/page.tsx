@@ -21,14 +21,13 @@ import {
 } from "@/components/ui/select";
 import { QUOTE_CATEGORIES, Quote } from "@/types/quotes";
 import { redirect, useParams, useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  AddNewQuoteState,
-  NewQuoteInput,
-  newQuoteSchema,
-} from "@/types/quotes";
+import { z } from "zod";
+import { AddNewQuoteState, newQuoteSchema } from "@/types/quotes";
 import { updateQuote } from "./action";
+import { Spinner } from "@/components/ui/spinner";
 
 const initialEditQuoteState: AddNewQuoteState = {
   success: false,
@@ -50,10 +49,10 @@ export default function EditQuotePage() {
   const {
     register,
     trigger,
-    setValue,
+    control,
     reset,
     formState: { errors: clientSideErrors },
-  } = useForm<NewQuoteInput>({
+  } = useForm<z.infer<typeof newQuoteSchema>>({
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
   });
@@ -72,7 +71,6 @@ export default function EditQuotePage() {
           quote: data.quote,
           category: data.category as any,
         });
-        setValue("category", data.category, { shouldValidate: false });
       } catch (error) {
         console.error("Hata:", error);
       } finally {
@@ -83,7 +81,7 @@ export default function EditQuotePage() {
     if (quoteId) {
       fetchQuote();
     }
-  }, [quoteId, reset, setValue]);
+  }, [quoteId, reset]);
 
   const handleClientValidation = async (formData: FormData) => {
     const isFormValid = await trigger();
@@ -97,8 +95,20 @@ export default function EditQuotePage() {
   };
 
   if (isLoading)
-    return <p className="text-center pt-20">Veriler yükleniyor...</p>;
-  if (isPending) return <p className="text-center pt-20">Kaydediliyor...</p>;
+    return (
+      <div className="flex min-h-screen items-center justify-center pt-20">
+        <Spinner className="h-8 w-8" />
+      </div>
+    );
+
+  if (isPending)
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center pt-20 gap-4">
+        <Spinner className="h-8 w-8" />
+        <p className="text-muted-foreground">Kaydediliyor...</p>
+      </div>
+    );
+
   if (state.success) {
     redirect("/");
   }
@@ -164,33 +174,39 @@ export default function EditQuotePage() {
 
               <Field>
                 <FieldLabel htmlFor="category">Category</FieldLabel>
-                <Select
+
+                <Controller
+                  control={control}
                   name="category"
-                  defaultValue={existingQuote?.category || state.data?.category}
-                  onValueChange={(value) => {
-                    setValue("category", value as NewQuoteInput["category"], {
-                      shouldValidate: true,
-                    });
-                  }}
-                >
-                  <SelectTrigger
-                    id="category"
-                    aria-invalid={
-                      !!state.errors?.fieldErrors?.category ||
-                      !!clientSideErrors.category
-                    }
-                    aria-describedby="category-error"
-                  >
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {QUOTE_CATEGORIES.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  defaultValue={
+                    (existingQuote?.category || state.data?.category) as any
+                  }
+                  render={({ field }) => (
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="category"
+                        aria-invalid={
+                          !!state.errors?.fieldErrors?.category ||
+                          !!clientSideErrors.category
+                        }
+                        aria-describedby="category-error"
+                      >
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {QUOTE_CATEGORIES.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
 
                 <div id="category-error" aria-live="polite">
                   {clientSideErrors.category ? (

@@ -1,15 +1,16 @@
-"use client";
+import { auth0 } from "@/lib/auth0";
+import { getQuotes } from "@/services/db/quotes";
+import LikedQuotesClient from "./LikedQuotesClient";
 
-import { use } from "react";
-import { H3 } from "@/components/typography/H3";
-import { QuotesContext } from "@/app/QuotesContext";
-import { Button } from "@/components/Button";
+export const dynamic = "force-dynamic";
 
-export default function LikedQuotesPage() {
-  const { quotes, handleUnlikeQuote } = use(QuotesContext);
+export default async function LikedQuotesPage() {
+  const session = await auth0.getSession();
+  const user = session?.user;
 
-  const likedQuotes = quotes.filter((q) => q.isLiked);
+  if (!user) return null;
 
+<<<<<<< Updated upstream
   return (
     <main className="min-h-screen flex flex-col items-center py-16 bg-background px-4 sm:px-6">
       <H3 element="h1">Liked Quotes</H3>
@@ -45,4 +46,15 @@ export default function LikedQuotesPage() {
       </div>
     </main>
   );
+=======
+  const quotes = await getQuotes(user.sub, true);
+
+  const serializedQuotes = quotes.map((q) => ({
+    ...q,
+    _id: q._id?.toString(),
+    likedBy: q.likedBy || [],
+  }));
+
+  return <LikedQuotesClient initialQuotes={serializedQuotes} />;
+>>>>>>> Stashed changes
 }

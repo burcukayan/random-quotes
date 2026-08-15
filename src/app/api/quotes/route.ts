@@ -1,17 +1,33 @@
-import { Collections, getDb } from "@/lib/db";
-import { Quote } from "@/types/quotes";
+import { NextResponse } from "next/server";
+import { getQuotes } from "@/services/db/quotes";
+import { auth0 } from "@/lib/auth0";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const db = await getDb();
-    const col = db.collection<Quote>(Collections.quotes);
-    const quotes = await col.find({}).toArray();
+    const { searchParams } = new URL(request.url);
+    const isLiked = searchParams.get("liked") === "true";
 
-    return Response.json({ quotes });
+    let userId: string | undefined = undefined;
+
+    if (isLiked) {
+      const session = await auth0.getSession();
+      userId = session?.user?.sub;
+
+      if (!userId) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    }
+
+    const quotes = await getQuotes(userId, isLiked);
+
+    return NextResponse.json({ quotes });
   } catch (error) {
     console.error("Failed to fetch quotes from DB:", error);
-    return Response.json({ error: "Could not get quotes." }, { status: 500 });
+    return NextResponse.json(
+      { error: "Could not get quotes." },
+      { status: 500 },
+    );
   }
 }

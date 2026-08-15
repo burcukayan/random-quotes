@@ -2,9 +2,9 @@
 
 import { auth0 } from "@/lib/auth0";
 import { AddNewQuoteState, newQuoteSchema } from "@/types/quotes";
-import { Collections, getDb } from '@/lib/db';
+
+import { updateQuoteById } from "@/services/db/quotes";
 import z from "zod";
-import { ObjectId } from "mongodb";
 import { revalidatePath } from "next/cache";
 
 export async function updateQuote(
@@ -41,38 +41,23 @@ export async function updateQuote(
       errors: validationErrors,
       data: rawData,
     };
-  } 
+  }
 
   try {
-    const db = await getDb();
-    const col = db.collection(Collections.quotes);
-   
-    
-    const filter = { 
-      _id: new ObjectId(quoteId),
-      createdBy: user.sub 
-    };
+    const result = await updateQuoteById(quoteId, user.sub, {
+      quote: validationOutput.data.quote,
+      author: validationOutput.data.author,
+      category: validationOutput.data.category,
+    });
 
-    const updateDoc = {
-      $set: {
-        quote: validationOutput.data.quote,
-        author: validationOutput.data.author,
-        category: validationOutput.data.category,
-        updatedAt: new Date()
-      },
-    };
-
-    const result = await col.updateOne(filter, updateDoc);
-
-   
     if (result.matchedCount === 0) {
       return {
         success: false,
-        message: "You are not authorized to edit quote or quote could not find.",
+        message:
+          "You are not authorized to edit quote or the quote was not found.",
       };
     }
 
-    
     revalidatePath("/");
     revalidatePath("/api/quotes");
 

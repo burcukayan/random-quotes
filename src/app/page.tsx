@@ -1,28 +1,23 @@
-"use client";
+import { auth0 } from "@/lib/auth0";
+import { getQuotes } from "@/services/db/quotes";
+import HomeClient from "./HomeClient";
 
-import { use } from "react";
-import { QuotesContext } from "@/app/QuotesContext";
-import { QuoteCard } from "@/app/QuoteCard";
-import { useUser } from "@auth0/nextjs-auth0";
+export const dynamic = "force-dynamic";
 
-export default function Home() {
-  const {
-    currentQuote,
-    handleQuoteIndexUpdate,
-    handleLikeQuote,
-    handleUnlikeQuote,
-  } = use(QuotesContext);
+export default async function Home() {
+  const session = await auth0.getSession();
+  const user = session?.user || null;
 
-  
-  const { user, isLoading } = useUser();
+  const quotes = await getQuotes();
 
-  if (!currentQuote) return null;
-
-  const { id, _id,  quote, author, isLiked, createdBy } = currentQuote;
-
-  const isCreator = Boolean(user?.sub && createdBy && user.sub === createdBy);
+  const serializedQuotes = quotes.map((q) => ({
+    ...q,
+    _id: q._id?.toString(),
+    likedBy: q.likedBy || [],
+  }));
 
   return (
+<<<<<<< Updated upstream
     <main className="min-h-screen flex items-center justify-center px-4 sm:px-6">
       <QuoteCard
         handleLikeQuote={() => handleLikeQuote(id)}
@@ -36,6 +31,10 @@ export default function Home() {
         isCreator={isCreator}
         quoteId={_id as string}
       />
+=======
+    <main className="min-h-screen flex items-center justify-center">
+      <HomeClient initialQuotes={serializedQuotes} user={user} />
+>>>>>>> Stashed changes
     </main>
   );
 }

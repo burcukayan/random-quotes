@@ -20,9 +20,15 @@ export const newQuoteSchema = z.object({
         "Quote should be 300 characters long maximum. Please try a shorter one.",
     }),
 
+<<<<<<< Updated upstream
     category: z.enum(QUOTE_CATEGORIES, {
       message: "Please select a category.",
     }),
+=======
+    category: z.enum(QUOTE_CATEGORIES, {  
+      message: "Please select a category",  
+    }),  
+>>>>>>> Stashed changes
 });
 
 export interface NewQuoteInput {
@@ -51,14 +57,13 @@ export type AddNewQuoteState = {
 };
 
 export interface Quote {
-  _id: unknown;
+  _id?: string; 
   quote: string;
   author: string;
   category: string;
-  isLiked?: boolean;
-  id?: number;
+  likedBy?: string[]; 
   createdBy: string;
   adminApproved: boolean;
-  createdAt: string;
+  createdAt: string; 
   updatedAt: string;
 }

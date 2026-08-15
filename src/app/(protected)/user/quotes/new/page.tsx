@@ -22,13 +22,17 @@ import {
 import { QUOTE_CATEGORIES } from "@/types/quotes";
 import { addNewQuote } from "./action";
 import { redirect } from "next/navigation";
-import { useForm } from "react-hook-form";
+
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AddNewQuoteState,
   NewQuoteInput,
   newQuoteSchema,
 } from "@/types/quotes";
+
+import { Spinner } from "@/components/ui/spinner";
+import { z } from "zod";
 
 const initialAddNewQuoteState: AddNewQuoteState = {
   success: false,
@@ -43,10 +47,14 @@ export default function AddNewQuotePage() {
   const {
     register,
     trigger,
-    setValue,
+    control,
     formState: { errors: clientSideErrors },
+<<<<<<< Updated upstream
     clearErrors,
   } = useForm<NewQuoteInput>({
+=======
+  } = useForm<z.infer<typeof newQuoteSchema>>({
+>>>>>>> Stashed changes
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
   });
@@ -64,7 +72,12 @@ export default function AddNewQuotePage() {
     }
   };
 
-  if (isPending) return <p>Loading...</p>;
+  if (isPending)
+    return (
+      <div className="flex h-screen w-full items-center justify-center">
+        <Spinner className="" />
+      </div>
+    );
 
   if (state.success) return redirect("/user/quotes/new/success");
 
@@ -129,8 +142,11 @@ export default function AddNewQuotePage() {
 
               <Field>
                 <FieldLabel htmlFor="category">Category</FieldLabel>
-                <Select
+
+                <Controller
+                  control={control}
                   name="category"
+<<<<<<< Updated upstream
                   defaultValue={state.data?.category}
                   onValueChange={(value) => {
                     setValue("category", value as NewQuoteInput["category"], {
@@ -156,6 +172,35 @@ export default function AddNewQuotePage() {
                     ))}
                   </SelectContent>
                 </Select>
+=======
+                  defaultValue={state.data?.category as any}  
+                  render={({ field }) => (
+                    <Select
+                      name={field.name}
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger
+                        id="category"
+                        aria-invalid={
+                          !!state.errors?.fieldErrors?.category ||
+                          !!clientSideErrors.category
+                        }
+                        aria-describedby="category-error"
+                      >
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {QUOTE_CATEGORIES.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+>>>>>>> Stashed changes
 
                 <div id="category-error" aria-live="polite">
                   {clientSideErrors.category ? (

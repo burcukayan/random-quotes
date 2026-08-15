@@ -4,6 +4,7 @@ import { createContext, useState, useEffect } from "react";
 import { getRandomNumber } from "@/utils/helper-functions";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import { Quote } from "@/types/quotes";
+import { fetchQuotesFromApi, ApiQuote } from "@/services/quotes";
 
 export interface ContextQuote extends Quote {
   id: number;
@@ -38,37 +39,37 @@ const InitialQuotesContext: QuotesContextInterface = {
 export const QuotesContext =
   createContext<QuotesContextInterface>(InitialQuotesContext);
 
-export function QuotesContextProvider({ children }: { children: React.ReactNode}) {
+export function QuotesContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { user } = useUser();
   const [quoteIndex, setQuoteIndex] = useState(0);
   const [internalQuotes, setInternalQuotes] = useState<InternalQuote[]>([]);
 
   useEffect(() => {
-    async function fetchQuotesFromDB() {
+    async function loadQuotes() {
       try {
-        const response = await fetch("/api/quotes");
-        if (!response.ok) throw new Error("Unable to fetch data");
-        const data = await response.json();
+        const actualQuotesArray = await fetchQuotesFromApi();
 
-        const actualQuotesArray = Array.isArray(data) ? data : data.quotes || [];
-
-        const formattedQuotes = actualQuotesArray.map((q: any, index: number) => ({
-          ...q,
-          id: index,
-          _id: q._id,
-          likedBy: q.likedBy ||[],
-          createdBy: q.createdBy,
-        }));
+        const formattedQuotes = actualQuotesArray.map(
+          (q: ApiQuote, index: number) => ({
+            ...q,
+            id: index,
+            _id: q._id,
+            likedBy: q.likedBy || [],
+            createdBy: q.createdBy,
+          }),
+        );
 
         setInternalQuotes(formattedQuotes);
-        } catch(error) {
-          console.error("An issue occured whhile loading datas:", error);
-        }
+      } catch (error) {
+        console.error("An issue occured while loading data:", error);
       }
-      fetchQuotesFromDB();
-    }, []);
-  
-    
+    }
+    loadQuotes();
+  }, []);
 
   function handleQuoteIndexUpdate() {
     if (internalQuotes.length === 0) return;
