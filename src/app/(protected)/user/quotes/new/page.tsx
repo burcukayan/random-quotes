@@ -48,13 +48,9 @@ export default function AddNewQuotePage() {
     register,
     trigger,
     control,
-    formState: { errors: clientSideErrors },
-<<<<<<< Updated upstream
     clearErrors,
-  } = useForm<NewQuoteInput>({
-=======
+    formState: { errors: clientSideErrors },
   } = useForm<z.infer<typeof newQuoteSchema>>({
->>>>>>> Stashed changes
     mode: "onBlur",
     resolver: zodResolver(newQuoteSchema),
   });
@@ -146,34 +142,7 @@ export default function AddNewQuotePage() {
                 <Controller
                   control={control}
                   name="category"
-<<<<<<< Updated upstream
-                  defaultValue={state.data?.category}
-                  onValueChange={(value) => {
-                    setValue("category", value as NewQuoteInput["category"], {
-                      shouldValidate: true,
-                    });
-                  }}
-                >
-                  <SelectTrigger
-                    id="category"
-                    aria-invalid={
-                      !!state.errors?.fieldErrors?.category ||
-                      !!clientSideErrors.category
-                    }
-                    aria-describedby="category-error"
-                  >
-                    <SelectValue placeholder="Select a category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {QUOTE_CATEGORIES.map((category) => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-=======
-                  defaultValue={state.data?.category as any}  
+                  defaultValue={state.data?.category as any}
                   render={({ field }) => (
                     <Select
                       name={field.name}
@@ -200,7 +169,6 @@ export default function AddNewQuotePage() {
                     </Select>
                   )}
                 />
->>>>>>> Stashed changes
 
                 <div id="category-error" aria-live="polite">
                   {clientSideErrors.category ? (

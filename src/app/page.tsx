@@ -17,24 +17,8 @@ export default async function Home() {
   }));
 
   return (
-<<<<<<< Updated upstream
-    <main className="min-h-screen flex items-center justify-center px-4 sm:px-6">
-      <QuoteCard
-        handleLikeQuote={() => handleLikeQuote(id)}
-        handleUnlikeQuote={() => handleUnlikeQuote(id)}
-        isLiked={isLiked}
-        quote={quote}
-        author={author}
-        handleQuoteIndexUpdate={handleQuoteIndexUpdate}
-        isLoggedIn={!!user}
-        isLoadingUser={isLoading}
-        isCreator={isCreator}
-        quoteId={_id as string}
-      />
-=======
     <main className="min-h-screen flex items-center justify-center">
       <HomeClient initialQuotes={serializedQuotes} user={user} />
->>>>>>> Stashed changes
     </main>
   );
 }

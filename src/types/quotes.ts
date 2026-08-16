@@ -1,6 +1,12 @@
 import z from "zod";
 
-export const QUOTE_CATEGORIES = ["Motivation", "Wisdom", "Humor", "Life", "Other"] as const;
+export const QUOTE_CATEGORIES = [
+  "Motivation",
+  "Wisdom",
+  "Humor",
+  "Life",
+  "Other",
+] as const;
 
 export const newQuoteSchema = z.object({
   author: z
@@ -20,15 +26,9 @@ export const newQuoteSchema = z.object({
         "Quote should be 300 characters long maximum. Please try a shorter one.",
     }),
 
-<<<<<<< Updated upstream
-    category: z.enum(QUOTE_CATEGORIES, {
-      message: "Please select a category.",
-    }),
-=======
-    category: z.enum(QUOTE_CATEGORIES, {  
-      message: "Please select a category",  
-    }),  
->>>>>>> Stashed changes
+  category: z.enum(QUOTE_CATEGORIES, {
+    message: "Please select a category.",
+  }),
 });
 
 export interface NewQuoteInput {
@@ -57,13 +57,13 @@ export type AddNewQuoteState = {
 };
 
 export interface Quote {
-  _id?: string; 
+  _id?: string;
   quote: string;
   author: string;
   category: string;
-  likedBy?: string[]; 
+  likedBy?: string[];
   createdBy: string;
   adminApproved: boolean;
-  createdAt: string; 
+  createdAt: string;
   updatedAt: string;
 }
